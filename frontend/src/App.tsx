@@ -19,9 +19,10 @@ function App() {
           x: desiredValue,
         }),
       });
-      const { error } = await res.json();
+      const resp = await res.json();
+      console.log(resp);
       if (!res.ok) {
-        setErrorMsg(error);
+        setErrorMsg(resp.error);
       }
     } catch (err: any) {
       setErrorMsg(err.stack);
@@ -34,6 +35,7 @@ function App() {
     setErrorMsg(null);
     try {
       const res = await fetch(`/api/value`);
+
       const { x, error } = await res.json();
       if (!res.ok) {
         setErrorMsg(error);

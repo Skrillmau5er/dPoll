@@ -7,8 +7,8 @@ import token from "../../solidity/artifacts/contracts/token.sol/Token.json";
 const PORT = 4001;
 const HOST = "http://localhost:5000";
 const NAMESPACE = "default";
-const SIMPLE_STORAGE_ADDRESS = "ContractAddressHere";
-const TOKEN_ADDRESS = "ContractAddressHere";
+const SIMPLE_STORAGE_ADDRESS = "0x58fE40C4Af84B708cb387f4787505Cd0a59c9f4f";
+const TOKEN_ADDRESS = "0xb76A4D4B1d68450F83Ec25F6b4eF8378F7C0bC9D";
 const app = express();
 const firefly = new FireFly({
   host: HOST,
