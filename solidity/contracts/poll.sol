@@ -1,36 +1,49 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.17;
 
-// Declares a new contract
+import "hardhat/console.sol";
+
 contract Poll {
-    struct Voter {
-        bool hasVoted;
+    string public title;
+    string[] public options;
+    address public creator;
+    mapping(string => uint) public votes;
+    mapping(address => bool) public hasVoted;
+    mapping(string => bool) public validOptions;
+
+    error OptionsAreNotUnique(string[] options, string title);
+
+    constructor(string memory _title, string[] memory _options, address _creator) {
+        title = _title;
+        options = _options;
+        creator = _creator;
+
+        for(uint i = 0; i < options.length; i++) {
+            if(validOptions[options[i]] == true) {
+                revert OptionsAreNotUnique(options, title);
+            }
+            validOptions[options[i]] = true;
+        }
     }
 
-     mapping(address => Voter) voters;
+    function vote(string memory option, address voter) public {
+        require(validOptions[option], "Invalid option");
+        require(!hasVoted[voter], "Already voted");
 
-    int32[] public polls;
-
-    function createPoll(int32 pollId) public {
-        polls.push(pollId);
+        votes[option]++;
+        hasVoted[voter] = true;
     }
 
-    function vote() public {
-        voters[msg.sender].hasVoted = true;
+    function getPollTitle() public view returns (string memory) {
+        return title;
     }
 
-    // Returns the currently stored unsigned integer
-    function getPolls() public view returns (int32[] memory x) {
-        return (polls);
+    function getPollOptions() public view returns (string[] memory) {
+        return options;
+    }
+
+    function getVotesForOption(string memory option) public view returns (uint) {
+        require(validOptions[option], "Invalid option");
+        return votes[option];
     }
 }
-
-    // Allows the unsigned integer stored to be changed
-    // function set(uint256 x) public {
-    //     _x = x;
-    //     emit Changed(msg.sender, _x);
-    // }
-
-
-
-    // event Changed(address indexed from, uint256 x);

@@ -2,13 +2,13 @@ import FireFly from "@hyperledger/firefly-sdk";
 import bodyparser from "body-parser";
 import express from "express";
 import simplestorage from "../../solidity/artifacts/contracts/simple_storage.sol/SimpleStorage.json";
-import token from "../../solidity/artifacts/contracts/token.sol/Token.json";
+import pollmanager from "../../solidity/artifacts/contracts/poll_manager.sol/PollManager.json";
 
 const PORT = 4001;
 const HOST = "http://localhost:5000";
 const NAMESPACE = "default";
-const SIMPLE_STORAGE_ADDRESS = "0x58fE40C4Af84B708cb387f4787505Cd0a59c9f4f";
-const TOKEN_ADDRESS = "0xb76A4D4B1d68450F83Ec25F6b4eF8378F7C0bC9D";
+const SIMPLE_STORAGE_ADDRESS = "0x0885e6507dB1864377442bEC4cF20cf12E97Ff64";
+const POLL_MANAGER_ADDRESS = "0x0730B7e627718dd7f26538bE762ea8937EB21e54";
 const app = express();
 const firefly = new FireFly({
   host: HOST,
@@ -18,22 +18,48 @@ const firefly = new FireFly({
 const ffiAndApiVersion = 2;
 const ssFfiName: string = `simpleStorageFFI-${ffiAndApiVersion}`;
 const ssApiName: string = `simpleStorageApi-${ffiAndApiVersion}`;
-const tokenFfiName: string = `tokenFFI-${ffiAndApiVersion}`;
-const tokenApiName: string = `tokenApi-${ffiAndApiVersion}`;
+
+const pollManagerFfiName: string = `pollManagerFFI-${ffiAndApiVersion}`;
+const pollManagerApiName: string = `pollManagerApi-${ffiAndApiVersion}`;
 
 app.use(bodyparser.json());
 
-app.get("/api/value", async (req, res) => {
-  res.send(await firefly.queryContractAPI(ssApiName, "get", {}));
+app.get("/api/poll/:pollAddress", async (req, res) => {
+  const response = await firefly.queryContractAPI(
+    pollManagerApiName,
+    "getPoll",
+    {
+      input: { pollAddress: req.params.pollAddress },
+    }
+  );
+  res.send(response.output);
 });
 
-app.post("/api/value", async (req, res) => {
+app.get("/api/polls", async (req, res) => {
+  const resp = await firefly.queryContractAPI(
+    pollManagerApiName,
+    "getPolls",
+    {}
+  );
+  res.send(resp.output);
+});
+
+app.post("/api/poll", async (req, res) => {
   try {
-    const fireflyRes = await firefly.invokeContractAPI(ssApiName, "set", {
-      input: {
-        x: req.body.x,
-      },
-    });
+    const fireflyRes = await firefly.invokeContractAPI(
+      pollManagerApiName,
+      "createPoll",
+      {
+        input: {
+          title: req.body.title,
+          options: req.body.pollOptions,
+          creator: req.body.creatorAddress,
+        },
+      }
+    );
+
+    console.log(fireflyRes);
+
     res.status(202).send({
       id: fireflyRes.id,
     });
@@ -45,19 +71,45 @@ app.post("/api/value", async (req, res) => {
   }
 });
 
-app.post("/api/mintToken", async (req, res) => {
+app.post("/api/vote", async (req, res) => {
   try {
     const fireflyRes = await firefly.invokeContractAPI(
-      tokenApiName,
-      "safeMint",
+      pollManagerApiName,
+      "voteOnPoll",
       {
         input: {
-          tokenId: Number(req.body.tokenId),
+          option: req.body.option,
+          pollAddress: req.body.pollAddress,
+          voter: req.body.account,
         },
       }
     );
+
     res.status(202).send({
-      tokenId: fireflyRes.input.input.tokenId,
+      id: fireflyRes.id,
+    });
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+  } catch (e: any) {
+    res.status(500).send({
+      error: e.message,
+    });
+  }
+});
+
+app.get("/api/value", async (req, res) => {
+  res.send(await firefly.queryContractAPI(ssApiName, "get", {}));
+});
+
+app.post("/api/value", async (req, res) => {
+  console.log(req.body.x);
+  try {
+    const fireflyRes = await firefly.invokeContractAPI(ssApiName, "set", {
+      input: {
+        x: req.body.x,
+      },
+    });
+    res.status(202).send({
+      id: fireflyRes.id,
     });
     /* eslint-disable  @typescript-eslint/no-explicit-any */
   } catch (e: any) {
@@ -110,34 +162,34 @@ async function init() {
       }
     });
 
-  // Token
+  // Poll Manager
   await firefly
     .generateContractInterface({
-      name: tokenFfiName,
+      name: pollManagerFfiName,
       namespace: NAMESPACE,
       version: "1.0",
-      description: "Deployed token contract",
+      description: "Deployed poll manager contract",
       input: {
-        abi: token.abi,
+        abi: pollmanager.abi,
       },
     })
-    .then(async (tokenGeneratedFFI) => {
-      if (!tokenGeneratedFFI) return;
-      return await firefly.createContractInterface(tokenGeneratedFFI, {
+    .then(async (pollManagerFfi) => {
+      if (!pollManagerFfi) return;
+      return await firefly.createContractInterface(pollManagerFfi, {
         confirm: true,
       });
     })
-    .then(async (tokenContractInterface) => {
-      if (!tokenContractInterface) return;
+    .then(async (pollManagerContractInterface) => {
+      if (!pollManagerContractInterface) return;
       return await firefly.createContractAPI(
         {
           interface: {
-            id: tokenContractInterface.id,
+            id: pollManagerContractInterface.id,
           },
           location: {
-            address: TOKEN_ADDRESS,
+            address: POLL_MANAGER_ADDRESS,
           },
-          name: tokenApiName,
+          name: pollManagerApiName,
         },
         { confirm: true }
       );
@@ -146,7 +198,7 @@ async function init() {
       const err = JSON.parse(JSON.stringify(e.originalError));
 
       if (err.status === 409) {
-        console.log("'tokenFFI' already exists in FireFly. Ignoring.");
+        console.log("'pollManagerFFI' already exists in FireFly. Ignoring.");
       } else {
         return;
       }
@@ -171,21 +223,40 @@ async function init() {
         );
       }
     });
-  // Token listener
+
+  // Poll Manager listeners
   await firefly
-    .createContractAPIListener(tokenApiName, "Transfer", {
-      topic: "transfer",
+    .createContractAPIListener(pollManagerApiName, "PollCreated", {
+      topic: "pollcreated",
     })
     .catch((e) => {
       const err = JSON.parse(JSON.stringify(e.originalError));
 
       if (err.status === 409) {
         console.log(
-          "Token 'transfer' event listener already exists in FireFly. Ignoring."
+          "Poll manager 'poll created' event listener already exists in FireFly. Ignoring."
         );
       } else {
         console.log(
-          `Error creating listener for token "transfer" event: ${err.message}`
+          `Error creating listener for poll manager "poll created" event: ${err.message}`
+        );
+      }
+    });
+
+  await firefly
+    .createContractAPIListener(pollManagerApiName, "VoteCast", {
+      topic: "votecast",
+    })
+    .catch((e) => {
+      const err = JSON.parse(JSON.stringify(e.originalError));
+
+      if (err.status === 409) {
+        console.log(
+          "Poll manager 'vote cast' event listener already exists in FireFly. Ignoring."
+        );
+      } else {
+        console.log(
+          `Error creating listener for poll manager "vote cast" event: ${err.message}`
         );
       }
     });
@@ -209,7 +280,7 @@ async function init() {
 
   // Start listening
   app.listen(PORT, () =>
-    console.log(`Kaleido DApp backend listening on port ${PORT}!`)
+    console.log(`dPoll backend listening on port ${PORT}!`)
   );
 }
 

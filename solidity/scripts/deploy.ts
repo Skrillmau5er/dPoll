@@ -5,13 +5,13 @@ async function main() {
   const simpleStorage = await SimpleStorage.deploy();
   await simpleStorage.deployed();
 
-  const Token = await ethers.getContractFactory("Token");
-  const token = await Token.deploy();
-  await token.deployed();
+  const PollManager = await ethers.getContractFactory("PollManager");
+  const pollManager = await PollManager.deploy();
+  await pollManager.deployed();
 
   console.log("Contracts deployed!\nAdd the addresses to backend/index.ts:");
   console.log(`SIMPLE_STORAGE_ADDRESS: ${simpleStorage.address}`);
-  console.log(`TOKEN_ADDRESS: ${token.address}`);
+  console.log(`POLL_MAANGER_ADDRESS: ${pollManager.address}`);
 }
 
 main()
