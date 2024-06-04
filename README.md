@@ -22,4 +22,8 @@ DPoll is a decentralized web application (DApp) that gives users the power to cr
 
 First, get firefly running on your machine. [Getting Started guide](https://hyperledger.github.io/firefly/latest/gettingstarted/).
 
-Once you have that up and running, look at `solidity`, `backend`, and `frontend` directories to see their respective README's for installation and setup guides.
+Once you have that up and running, look at `solidity`, `backend`, and `frontend` directories to see their respective README's for installation and setup. For ease of use, I have them linked below:
+
+- [Frontend](https://github.com/Skrillmau5er/dPoll/tree/master/frontend)
+- [Backend](https://github.com/Skrillmau5er/dPoll/tree/master/backend)
+- [Solidity](https://github.com/Skrillmau5er/dPoll/tree/master/solidity)
