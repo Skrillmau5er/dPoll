@@ -5,7 +5,7 @@ This folder contains the two contacts `Poll` and `PollManager` along with a seri
 ## Contracts
 
 - Poll: This contains the contract for a single poll, and all its relevant fields. It also includes mapping of who has voted on the polls, and all the information about the poll. [poll.sol](./contracts/poll.sol)
-- Poll Manager: Stores a list of all the polls. Inherits the responsibility of creating and getting polls.[poll_manager.sol](./contracts/poll_manager.sol)
+- Poll Manager: Stores a list of all the polls. Inherits the responsibility of creating and fetching polls.[poll_manager.sol](./contracts/poll_manager.sol)
 
 ## Installation and Usage
 
