@@ -1,15 +1,10 @@
-# Backend: Kaleido Developer Challenge
+# Backend: dPoll
 
-A very simple TypeScript Node.js app that uses the FireFly SDK to interact with the [example solidty smart contracts](../solidity/contracts/).
+A simple Node.js Express API that bridges the gap between the frontend application and the smart contracts stored on the chain. This API primarily interacts with the smart contracts through the use of the `@hyperledger/firefly-sdk` package.
 
-## Run
+## Run API
 
 ```bash
 npm install
 npm start
 ```
-
-## Who is making all these blockchain transactions?
-
-This might help: `ff accounts list <StackName>`
-With further [docs here](https://hyperledger.github.io/firefly/latest/reference/identities/)

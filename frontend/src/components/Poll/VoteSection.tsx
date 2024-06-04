@@ -50,7 +50,7 @@ export default function VoteSection({ poll }: VoteSectionProps) {
         title: message,
         status: error.includes("Already voted") ? "warning" : "error",
         position: "top",
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
     } else {
@@ -58,7 +58,7 @@ export default function VoteSection({ poll }: VoteSectionProps) {
         title: "Your vote has been submitted",
         status: "success",
         position: "top",
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
       queryClient.invalidateQueries({ queryKey: ["poll"] });

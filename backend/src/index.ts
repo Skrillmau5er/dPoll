@@ -1,14 +1,12 @@
 import FireFly from "@hyperledger/firefly-sdk";
 import bodyparser from "body-parser";
 import express from "express";
-import simplestorage from "../../solidity/artifacts/contracts/simple_storage.sol/SimpleStorage.json";
 import pollmanager from "../../solidity/artifacts/contracts/poll_manager.sol/PollManager.json";
 
 const PORT = 4001;
 const HOST = "http://localhost:5000";
 const NAMESPACE = "default";
-const SIMPLE_STORAGE_ADDRESS = "0x0885e6507dB1864377442bEC4cF20cf12E97Ff64";
-const POLL_MANAGER_ADDRESS = "0x0730B7e627718dd7f26538bE762ea8937EB21e54";
+const POLL_MANAGER_ADDRESS = "0x58fE40C4Af84B708cb387f4787505Cd0a59c9f4f";
 const app = express();
 const firefly = new FireFly({
   host: HOST,
@@ -16,8 +14,6 @@ const firefly = new FireFly({
 });
 
 const ffiAndApiVersion = 2;
-const ssFfiName: string = `simpleStorageFFI-${ffiAndApiVersion}`;
-const ssApiName: string = `simpleStorageApi-${ffiAndApiVersion}`;
 
 const pollManagerFfiName: string = `pollManagerFFI-${ffiAndApiVersion}`;
 const pollManagerApiName: string = `pollManagerApi-${ffiAndApiVersion}`;
@@ -58,8 +54,6 @@ app.post("/api/poll", async (req, res) => {
       }
     );
 
-    console.log(fireflyRes);
-
     res.status(202).send({
       id: fireflyRes.id,
     });
@@ -96,72 +90,7 @@ app.post("/api/vote", async (req, res) => {
   }
 });
 
-app.get("/api/value", async (req, res) => {
-  res.send(await firefly.queryContractAPI(ssApiName, "get", {}));
-});
-
-app.post("/api/value", async (req, res) => {
-  console.log(req.body.x);
-  try {
-    const fireflyRes = await firefly.invokeContractAPI(ssApiName, "set", {
-      input: {
-        x: req.body.x,
-      },
-    });
-    res.status(202).send({
-      id: fireflyRes.id,
-    });
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-  } catch (e: any) {
-    res.status(500).send({
-      error: e.message,
-    });
-  }
-});
-
 async function init() {
-  // Simple storage
-  await firefly
-    .generateContractInterface({
-      name: ssFfiName,
-      namespace: NAMESPACE,
-      version: "1.0",
-      description: "Deployed simple-storage contract",
-      input: {
-        abi: simplestorage.abi,
-      },
-    })
-    .then(async (ssGeneratedFFI) => {
-      if (!ssGeneratedFFI) return;
-      return await firefly.createContractInterface(ssGeneratedFFI, {
-        confirm: true,
-      });
-    })
-    .then(async (ssContractInterface) => {
-      if (!ssContractInterface) return;
-      return await firefly.createContractAPI(
-        {
-          interface: {
-            id: ssContractInterface.id,
-          },
-          location: {
-            address: SIMPLE_STORAGE_ADDRESS,
-          },
-          name: ssApiName,
-        },
-        { confirm: true }
-      );
-    })
-    .catch((e) => {
-      const err = JSON.parse(JSON.stringify(e.originalError));
-
-      if (err.status === 409) {
-        console.log("'simpleStorageFFI' already exists in FireFly. Ignoring.");
-      } else {
-        return;
-      }
-    });
-
   // Poll Manager
   await firefly
     .generateContractInterface({
@@ -205,26 +134,6 @@ async function init() {
     });
 
   // Listeners
-  // Simple storage listener
-  await firefly
-    .createContractAPIListener(ssApiName, "Changed", {
-      topic: "changed",
-    })
-    .catch((e) => {
-      const err = JSON.parse(JSON.stringify(e.originalError));
-
-      if (err.status === 409) {
-        console.log(
-          "Simple storage 'changed' event listener already exists in FireFly. Ignoring."
-        );
-      } else {
-        console.log(
-          `Error creating listener for simple_storage "changed" event: ${err.message}`
-        );
-      }
-    });
-
-  // Poll Manager listeners
   await firefly
     .createContractAPIListener(pollManagerApiName, "PollCreated", {
       topic: "pollcreated",

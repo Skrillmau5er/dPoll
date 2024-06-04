@@ -23,7 +23,7 @@ export default function Poll() {
         title: "Error getting poll information",
         status: "error",
         position: "top",
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
     }

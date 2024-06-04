@@ -1,31 +1,33 @@
-# Solidity Contracts: Kaleido Developer Challenge
+# Solidity Contracts: dPoll
 
 This folder demonstrates how to compile, test, and deploy two sample solidity contracts with Hardhat. View the Hardhat [docs here](https://hardhat.org/hardhat-runner/docs/guides/compile-contracts)
 
-## Sample contracts
+## Contracts
 
-- A basic storage contract: [simple_storage.sol](./contracts/simple_storage.sol)
-- A basic ERC721 token contract: [token.sol](./contracts/token.sol)
+- Poll: This contains the contract for a single poll, and all its relevant fields. It also includes mapping of who has voted on the polls, and all the information about the poll. [poll.sol](./contracts/poll.sol)
+- Poll Manager: Stores a list of all the polls. Inherits the responsibility of creating and getting polls.[poll_manager.sol](./contracts/poll_manager.sol)
 
-## Install Dependencies
+## Installation and Usage
+
+### Install dependencies:
 
 ```bash
-npm i
+npm install
 ```
 
-## Compile Smart Contracts
+### Compile Smart Contracts:
 
 ```bash
 npm run compile
 ```
 
-## Test Smart Contracts
+### Test Smart Contracts:
 
 ```bash
 npm run test
 ```
 
-## Deploy Smart Contracts to FireFly
+### Deploy Smart Contracts to FireFly:
 
 ```bash
 npx hardhat run scripts/deploy.ts --network firefly
