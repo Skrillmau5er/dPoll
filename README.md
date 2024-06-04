@@ -20,6 +20,7 @@ The dApp allows you to connect to your metamask wallet as a means of authenticat
 - **Social Engagement**: Encourage participation and discussion within your community.
 
 ![HomePage](HomePage.png)
+![Poll](Poll.png)
 
 ## Installation Instructions
 
