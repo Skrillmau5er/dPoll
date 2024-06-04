@@ -1,6 +1,6 @@
 # dPoll
 
-DPoll is a decentralized web application (DApp) that gives users the power to create, view, and vote on polls. The app is built with React, Node.js, and Hyperledger FireFly. It also uses on-chain smart contracts written in Solidity.
+dPoll is a decentralized web application (dApp) that gives users the power to create, view, and vote on polls. The app is built with React, Node.js, and Hyperledger FireFly. It also uses on-chain smart contracts written in Solidity.
 
 The DApp allows you to connect to your metamask wallet as a means of authentication. Once you are connected, you can create your own polls, and also vote on others polls.
 
@@ -14,7 +14,7 @@ The DApp allows you to connect to your metamask wallet as a means of authenticat
 
 ### Use Cases:
 
-- **Community Governance**: Make collective decisions for decentralized projects or communities.
+- **Community Governance**: Make collective decisions together, even when you are spread across the globe.
 - **Surveys & Feedback**: Gather opinions on various topics in a transparent and trustworthy way.
 - **Decision-Making**: Use polls to help choose between different options or ideas.
 - **Social Engagement**: Encourage participation and discussion within your community.
