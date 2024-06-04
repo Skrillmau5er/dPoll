@@ -10,7 +10,7 @@ The dApp allows you to connect to your metamask wallet as a means of authenticat
 - **Transparent Voting**: Each vote is securely recorded on the blockchain, ensuring tamper-proof results and verifiable outcomes.
 - **One Vote Per User**: Each address is limited to a single vote per poll, maintaining fairness.
 - **View Results**: Track poll progress and final results in real-time.
-- **Decentralized**: Leveraging blockchain technology ensures the dapp is censorship-resistant and community-driven.
+- **Decentralized**: Leveraging blockchain technology ensures the dApp is censorship-resistant and community-driven.
 
 ### Use Cases:
 
