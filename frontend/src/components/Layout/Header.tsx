@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import dPollLogo from "../../assets/poll.png";
-import { Avatar } from "@chakra-ui/react";
 import AccountMenu from "../Auth/AccountMenu";
 
 export default function Header() {

@@ -33,7 +33,6 @@ export default function AccountMenu() {
 
   const connect = async () => {
     try {
-      console.log("here");
       await sdk?.connect();
     } catch (err) {
       console.warn("Failed to connect..", err);
@@ -46,6 +45,14 @@ export default function AccountMenu() {
       });
     }
   };
+
+  if (!connected) {
+    return (
+      <Button colorScheme="blue" variant="ghost" onClick={connect}>
+        Connect Account
+      </Button>
+    );
+  }
 
   return (
     <Popover closeOnBlur>
