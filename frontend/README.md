@@ -2,12 +2,12 @@
 
 The dPoll frontend has 4 main pages:
 
-1. Home Page
-2. Create Poll
-3. View Polls
-4. View & Vote on Poll
+1. Home Page (`/`)
+2. Create Poll (`/create`)
+3. View Polls (`/polls`)
+4. View & Vote on Poll (`/poll/:pollAddress`)
 
-It uses metamask to authenticate you to allow you to create or vote on polls.
+It uses metamask to authenticate you to allow you to create or vote on polls. You can either authenticate in the header before hand, or it will prompt you to do so when you are about to take an action that requires it.
 
 ## Run app
 

@@ -4,7 +4,32 @@ DPoll is a decentralized web application (DApp) that gives users the power to cr
 
 The DApp allows you to connect to your metamask wallet as a means of authentication. Once you are connected, you can create your own polls, and also vote on others polls.
 
+### Key Features & Benefits:
+
+- **Create Polls**: Easily create custom polls with multiple choice options (up to 4 options).
+- **Transparent Voting**: Each vote is securely recorded on the blockchain, ensuring tamper-proof results and verifiable outcomes.
+- **One Vote Per User**: Each address is limited to a single vote per poll, maintaining fairness.
+- **View Results**: Track poll progress and final results in real-time.
+- **Decentralized**: Leveraging blockchain technology ensures the dapp is censorship-resistant and community-driven.
+
+### Use Cases:
+
+- **Community Governance**: Make collective decisions for decentralized projects or communities.
+- **Surveys & Feedback**: Gather opinions on various topics in a transparent and trustworthy way.
+- **Decision-Making**: Use polls to help choose between different options or ideas.
+- **Social Engagement**: Encourage participation and discussion within your community.
+
 ![HomePage](HomePage.png)
+
+## Installation Instructions
+
+First, get firefly running on your machine. [Getting Started guide](https://hyperledger.github.io/firefly/latest/gettingstarted/).
+
+Once you have that up and running, look at `solidity`, `backend`, and `frontend` directories to see their respective README's for installation and setup. For ease of use, I have them linked below:
+
+- [Frontend](https://github.com/Skrillmau5er/dPoll/tree/master/frontend)
+- [Backend](https://github.com/Skrillmau5er/dPoll/tree/master/backend)
+- [Solidity](https://github.com/Skrillmau5er/dPoll/tree/master/solidity)
 
 ## Technologies Used
 
@@ -19,13 +44,3 @@ The DApp allows you to connect to your metamask wallet as a means of authenticat
 - [Hyperledger Firefly](https://www.npmjs.com/package/@hyperledger/firefly-sdk)
 - [Solidity](https://soliditylang.org/)
 - [Hardhat](https://hardhat.org/)
-
-## Installation Instructions
-
-First, get firefly running on your machine. [Getting Started guide](https://hyperledger.github.io/firefly/latest/gettingstarted/).
-
-Once you have that up and running, look at `solidity`, `backend`, and `frontend` directories to see their respective README's for installation and setup. For ease of use, I have them linked below:
-
-- [Frontend](https://github.com/Skrillmau5er/dPoll/tree/master/frontend)
-- [Backend](https://github.com/Skrillmau5er/dPoll/tree/master/backend)
-- [Solidity](https://github.com/Skrillmau5er/dPoll/tree/master/solidity)
