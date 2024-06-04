@@ -13,7 +13,7 @@ import {
 import { useSDK } from "@metamask/sdk-react";
 
 export default function AccountMenu() {
-  const { account, connected, sdk } = useSDK();
+  const { account, sdk } = useSDK();
   const toast = useToast();
 
   const disconnect = async () => {
@@ -46,7 +46,7 @@ export default function AccountMenu() {
     }
   };
 
-  if (!connected) {
+  if (!account) {
     return (
       <Button colorScheme="blue" variant="ghost" onClick={connect}>
         Connect Account
@@ -69,9 +69,9 @@ export default function AccountMenu() {
             <Button
               colorScheme="blue"
               className="w-full"
-              onClick={connected ? disconnect : connect}
+              onClick={account ? disconnect : connect}
             >
-              {connected ? "Disconnect Account" : "Connect Account"}
+              {account ? "Disconnect Account" : "Connect Account"}
             </Button>
           </PopoverBody>
         </PopoverContent>
